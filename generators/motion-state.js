@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-let nextMotionStateId = 2;
+let nextMotionStateId = 16;
 
 function addMotionState(data, meetingId, workflowId, options = {}) {
   data[`motion_state`][`${nextMotionStateId}`] = Object.assign({

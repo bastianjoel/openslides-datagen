@@ -1,6 +1,6 @@
 import { addMotionState } from './motion-state.js';
 
-let nextMotionWorkflowId = 2;
+let nextMotionWorkflowId = 3;
 
 function addDefaultWorkflow(data, meetingId, options = {}) {
   data[`motion_workflow`][`${nextMotionWorkflowId}`] = Object.assign({

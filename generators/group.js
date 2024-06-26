@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-let nextGroupId = 2;
+let nextGroupId = 6;
 
 function addGroup(data, meetingId, options = {}) {
   data[`group`][`${nextGroupId}`] = Object.assign({
