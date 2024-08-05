@@ -23,9 +23,10 @@ function addMeetingUser(data, meetingId, userId, options = {}) {
   data[`user`][`${userId}`][`committee_ids`].push(data[`meeting`][`${meetingId}`][`committee_id`]);
   data[`user`][`${userId}`][`meeting_ids`].push(meetingId);
   data[`user`][`${userId}`][`meeting_user_ids`].push(nextMeetingUserId);
-
+  
   data[`meeting`][`${meetingId}`][`user_ids`].push(userId);
   data[`meeting`][`${meetingId}`][`meeting_user_ids`].push(nextMeetingUserId);
+  data[`committee`][data[`meeting`][`${meetingId}`][`committee_id`]][`user_ids`].push(userId);
   for (let group of groups) {
     if (data[`group`][`${group}`][`meeting_user_ids`]) {
       data[`group`][`${group}`][`meeting_user_ids`].push(nextMeetingUserId);

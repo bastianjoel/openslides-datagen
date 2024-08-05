@@ -33,4 +33,6 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
   }
 }
 
-console.log(JSON.stringify(data));
+console.log(
+  JSON.stringify(data, (key, value) => key.endsWith(`_ids`) && value instanceof Array ? [...new Set(value)] : value)
+);
