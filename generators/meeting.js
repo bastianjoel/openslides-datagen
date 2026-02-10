@@ -90,6 +90,8 @@ function addMeeting(data, committeeId, options = {}) {
     "used_as_reference_projector_meeting_id": nextMeetingId,
     "used_as_default_projector_for_agenda_item_list_in_meeting_id": nextMeetingId,
     "used_as_default_projector_for_topic_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_list_of_speakers_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_current_los_in_meeting_id": nextMeetingId,
     "used_as_default_projector_for_motion_in_meeting_id": nextMeetingId,
     "used_as_default_projector_for_amendment_in_meeting_id": nextMeetingId,
     "used_as_default_projector_for_motion_block_in_meeting_id": nextMeetingId,
