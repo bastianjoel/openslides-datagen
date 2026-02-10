@@ -39,6 +39,8 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       addMeetingUser(data, meetingId, uId);
     }
     
+    const meetingUsers = data[`meeting`][`${meetingId}`][`meeting_user_ids`];
+    
     // Generate topics with agenda items and list of speakers
     const numTopics = faker.helpers.rangeToNumber(NUM_TOPICS_PER_MEETING);
     for (let tI = 0; tI < numTopics; tI++) {
@@ -52,7 +54,6 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       
       // Add some speakers to the list
       const numSpeakers = faker.number.int({ min: 0, max: 5 });
-      const meetingUsers = data[`meeting`][`${meetingId}`][`meeting_user_ids`];
       if (meetingUsers && meetingUsers.length > 0) {
         for (let sI = 0; sI < numSpeakers && sI < meetingUsers.length; sI++) {
           const randomMeetingUserId = faker.helpers.arrayElement(meetingUsers);
@@ -74,7 +75,6 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       
       // Add candidates
       const numCandidates = faker.number.int({ min: 1, max: 5 });
-      const meetingUsers = data[`meeting`][`${meetingId}`][`meeting_user_ids`];
       if (meetingUsers && meetingUsers.length > 0) {
         const candidates = faker.helpers.arrayElements(meetingUsers, Math.min(numCandidates, meetingUsers.length));
         for (let candidateMeetingUserId of candidates) {
