@@ -19,7 +19,6 @@ const NUM_USERS = 2000;
 const NUM_USERS_PER_MEETING = { min: 50, max: NUM_USERS };
 const NUM_TOPICS_PER_MEETING = { min: 5, max: 20 };
 const NUM_ASSIGNMENTS_PER_MEETING = { min: 1, max: 5 };
-const NUM_POLLS_PER_MEETING = { min: 2, max: 8 };
 
 for (let i = nextUserId; i <= NUM_USERS; i++) {
   addUser(data);
@@ -112,27 +111,8 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       }
     }
     
-    // Generate some standalone polls (not tied to specific content)
-    const numPolls = faker.helpers.rangeToNumber(NUM_POLLS_PER_MEETING);
-    for (let pI = 0; pI < numPolls; pI++) {
-      // Create a poll for a random topic or assignment
-      const contentType = faker.helpers.arrayElement(['topic', 'assignment']);
-      let contentId;
-      
-      if (contentType === 'topic' && data[`meeting`][`${meetingId}`][`topic_ids`].length > 0) {
-        contentId = faker.helpers.arrayElement(data[`meeting`][`${meetingId}`][`topic_ids`]);
-        const pollId = addPoll(data, meetingId, `topic/${contentId}`);
-        
-        // Create an option for the topic poll
-        const optionId = addOption(data, meetingId, pollId, `topic/${contentId}`);
-        
-        // Add votes
-        const numVotes = faker.number.int({ min: 0, max: 5 });
-        for (let vI = 0; vI < numVotes; vI++) {
-          addVote(data, meetingId, optionId);
-        }
-      }
-    }
+    // Note: Standalone polls are not generated here as polls must be tied to motions or assignments
+    // Topics do not support poll_ids field
   }
 }
 
