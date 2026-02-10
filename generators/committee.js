@@ -16,6 +16,12 @@ function addCommittee(data, options = {}) {
   }, options);
 
   data[`organization`][`1`][`committee_ids`].push(nextCommitteeId);
+  
+  // Update user 1's committee_management_ids to maintain bidirectional relationship
+  if (data[`user`][`1`]) {
+    data[`user`][`1`][`committee_management_ids`].push(nextCommitteeId);
+  }
+  
   nextCommitteeId++;
 
   return nextCommitteeId - 1;
