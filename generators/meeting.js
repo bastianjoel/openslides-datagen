@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { addDefaultWorkflow } from './motion-workflow.js';
 import { addDefaultGroups } from './group.js';
+import { addProjector } from './projector.js';
 
 let nextMeetingId = 2;
 
@@ -35,6 +36,7 @@ function addMeeting(data, committeeId, options = {}) {
     "mediafile_ids": [],
     "motion_ids": [],
     "motion_submitter_ids": [],
+    "motion_supporter_ids": [],
     "motion_comment_section_ids": [],
     "motion_comment_ids": [],
     "motion_state_ids": [],
@@ -69,7 +71,8 @@ function addMeeting(data, committeeId, options = {}) {
     "default_projector_assignment_poll_ids": [],
     "default_projector_motion_poll_ids": [],
     "default_projector_poll_ids": [],
-    "projection_ids": []
+    "projection_ids": [],
+    "meeting_mediafile_ids": []
   }, options);
 
   data[`committee`][`${committeeId}`][`meeting_ids`].push(nextMeetingId);
@@ -81,6 +84,41 @@ function addMeeting(data, committeeId, options = {}) {
   }
 
   data[`organization`][`1`][`active_meeting_ids`].push(nextMeetingId);
+  
+  // Create a default projector for the meeting
+  const projectorId = addProjector(data, nextMeetingId, "Default projector", {
+    "used_as_reference_projector_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_agenda_item_list_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_topic_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_motion_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_amendment_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_motion_block_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_assignment_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_mediafile_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_message_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_countdown_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_assignment_poll_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_motion_poll_in_meeting_id": nextMeetingId,
+    "used_as_default_projector_for_poll_in_meeting_id": nextMeetingId
+  });
+  
+  // Set the meeting's projector references
+  data[`meeting`][`${nextMeetingId}`][`reference_projector_id`] = projectorId;
+  data[`meeting`][`${nextMeetingId}`][`default_projector_agenda_item_list_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_topic_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_list_of_speakers_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_current_los_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_motion_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_amendment_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_motion_block_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_assignment_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_mediafile_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_message_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_countdown_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_assignment_poll_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_motion_poll_ids`] = [projectorId];
+  data[`meeting`][`${nextMeetingId}`][`default_projector_poll_ids`] = [projectorId];
+  
   addDefaultWorkflow(data, nextMeetingId);
   addDefaultGroups(data, nextMeetingId);
   nextMeetingId++;

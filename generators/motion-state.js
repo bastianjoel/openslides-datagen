@@ -18,7 +18,7 @@ function addMotionState(data, meetingId, workflowId, options = {}) {
     "previous_state_ids": [],
     "motion_ids": [],
     "workflow_id": workflowId,
-    "first_state_of_workflow_id": null,
+    "first_state_of_workflow_id": workflowId,
     "restrictions": [],
     "show_state_extension_field": false,
     "show_recommendation_extension_field": false,
@@ -28,11 +28,15 @@ function addMotionState(data, meetingId, workflowId, options = {}) {
   }, options);
 
   data[`meeting`][`${meetingId}`][`motion_state_ids`].push(nextMotionStateId);
+  
+  // Add this state to the workflow's state_ids array
+  data[`motion_workflow`][`${workflowId}`][`state_ids`].push(nextMotionStateId);
 
+  // Set the workflow's first_state_id if not already set
   if (!data[`motion_workflow`][`${workflowId}`][`first_state_id`]) {
     data[`motion_workflow`][`${workflowId}`][`first_state_id`] = nextMotionStateId;
   }
-  data[`motion_state`][`${nextMotionStateId}`][`first_state_of_workflow_id`] = data[`motion_workflow`][`${workflowId}`][`first_state_id`];
+  
   nextMotionStateId++;
 
   return nextMotionStateId - 1;
