@@ -40,7 +40,6 @@ const NUM_USERS = 2000;
 const NUM_USERS_PER_MEETING = { min: 50, max: NUM_USERS };
 const NUM_TOPICS_PER_MEETING = { min: 5, max: 20 };
 const NUM_ASSIGNMENTS_PER_MEETING = { min: 1, max: 5 };
-const NUM_POLLS_PER_MEETING = { min: 2, max: 8 };
 ```
 
 ## Generators
@@ -50,8 +49,9 @@ The following generators are available:
 ### Core Entities
 - **user.js** - Generates users with demographics and authentication details
 - **committee.js** - Creates committees within the organization
-- **meeting.js** - Generates meetings with all required settings
+- **meeting.js** - Generates meetings with all required settings and projectors
 - **meeting-user.js** - Links users to meetings with meeting-specific data
+- **projector.js** - Creates projectors for meetings with all required fields
 
 ### Meeting Content
 - **topic.js** - Creates topics for meetings with titles and text content
