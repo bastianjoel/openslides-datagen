@@ -31,8 +31,8 @@ function addUser(data, options = {}) {
 
   data[`organization`][`1`][`user_ids`].push(nextUserId);
   
-  // Update gender relation
-  if (data[`gender`][`${genderId}`]) {
+  // Update gender relation - ensure gender collection exists
+  if (data[`gender`] && data[`gender`][`${genderId}`] && Array.isArray(data[`gender`][`${genderId}`][`user_ids`])) {
     data[`gender`][`${genderId}`][`user_ids`].push(nextUserId);
   }
   
