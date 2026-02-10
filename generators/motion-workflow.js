@@ -6,7 +6,6 @@ function addDefaultWorkflow(data, meetingId, options = {}) {
   data[`motion_workflow`][`${nextMotionWorkflowId}`] = Object.assign({
     "id": nextMotionWorkflowId,
     "name": "Simple Workflow",
-    "sequential_number": Object.values(data[`motion_workflow`]).length,
     "state_ids": [],
     "first_state_id": null,
     "default_workflow_meeting_id": meetingId,

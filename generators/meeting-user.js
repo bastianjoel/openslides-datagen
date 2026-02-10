@@ -14,8 +14,10 @@ function addMeetingUser(data, meetingId, userId, options = {}) {
     "number": faker.finance.accountNumber(),
     "about_me": faker.lorem.words(5, 12),
     "vote_weight": "1.000000",
+    "personal_note_ids": [],
     "speaker_ids": [],
-    "supported_motion_ids": [],
+    "motion_supporter_ids": [],
+    "motion_submitter_ids": [],
     "assignment_candidate_ids": [],
     "structure_level_ids": structureLevels,
     "group_ids": groups

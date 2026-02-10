@@ -8,7 +8,8 @@ function addGroup(data, meetingId, options = {}) {
     "name": faker.word.noun(),
     "permissions": [],
     "weight": 1,
-    "meeting_id": meetingId
+    "meeting_id": meetingId,
+    "meeting_user_ids": []
   }, options);
 
   data[`meeting`][`${meetingId}`][`group_ids`].push(nextGroupId);
