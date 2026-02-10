@@ -13,13 +13,14 @@ import { faker } from '@faker-js/faker';
 const fileData = readFileSync('./example-data.json');
 const data = JSON.parse(fileData);
 
-const NUM_COMMITTEES = 50;
-const NUM_MEETINGS_PER_COMMITTEE = { min: 1, max: 8 };
-const NUM_USERS = 2000;
-const NUM_USERS_PER_MEETING = { min: 50, max: NUM_USERS };
-const NUM_TOPICS_PER_MEETING = { min: 5, max: 20 };
-const NUM_ASSIGNMENTS_PER_MEETING = { min: 1, max: 5 };
-const NUM_POLLS_PER_MEETING = { min: 2, max: 8 };
+// Small test data
+const NUM_COMMITTEES = 2;
+const NUM_MEETINGS_PER_COMMITTEE = { min: 1, max: 2 };
+const NUM_USERS = 10;
+const NUM_USERS_PER_MEETING = { min: 5, max: 10 };
+const NUM_TOPICS_PER_MEETING = { min: 2, max: 3 };
+const NUM_ASSIGNMENTS_PER_MEETING = { min: 1, max: 2 };
+const NUM_POLLS_PER_MEETING = { min: 1, max: 2 };
 
 for (let i = nextUserId; i <= NUM_USERS; i++) {
   addUser(data);
@@ -51,7 +52,7 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       data[`topic`][`${topicId}`][`list_of_speakers_id`] = listOfSpeakersId;
       
       // Add some speakers to the list
-      const numSpeakers = faker.number.int({ min: 0, max: 5 });
+      const numSpeakers = faker.number.int({ min: 0, max: 2 });
       const meetingUsers = data[`meeting`][`${meetingId}`][`meeting_user_ids`];
       if (meetingUsers && meetingUsers.length > 0) {
         for (let sI = 0; sI < numSpeakers && sI < meetingUsers.length; sI++) {
@@ -73,7 +74,7 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       data[`assignment`][`${assignmentId}`][`list_of_speakers_id`] = listOfSpeakersId;
       
       // Add candidates
-      const numCandidates = faker.number.int({ min: 1, max: 5 });
+      const numCandidates = faker.number.int({ min: 1, max: 3 });
       const meetingUsers = data[`meeting`][`${meetingId}`][`meeting_user_ids`];
       if (meetingUsers && meetingUsers.length > 0) {
         const candidates = faker.helpers.arrayElements(meetingUsers, Math.min(numCandidates, meetingUsers.length));
@@ -93,7 +94,7 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
             
             // Add some votes
             if (faker.datatype.boolean(0.5)) {
-              const numVotes = faker.number.int({ min: 1, max: 3 });
+              const numVotes = faker.number.int({ min: 1, max: 2 });
               for (let vI = 0; vI < numVotes; vI++) {
                 addVote(data, meetingId, optionId);
               }
@@ -104,32 +105,10 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       
       // Add some speakers to assignment list
       if (meetingUsers && meetingUsers.length > 0) {
-        const numSpeakers = faker.number.int({ min: 0, max: 3 });
+        const numSpeakers = faker.number.int({ min: 0, max: 2 });
         for (let sI = 0; sI < numSpeakers && sI < meetingUsers.length; sI++) {
           const randomMeetingUserId = faker.helpers.arrayElement(meetingUsers);
           addSpeaker(data, meetingId, listOfSpeakersId, randomMeetingUserId);
-        }
-      }
-    }
-    
-    // Generate some standalone polls (not tied to specific content)
-    const numPolls = faker.helpers.rangeToNumber(NUM_POLLS_PER_MEETING);
-    for (let pI = 0; pI < numPolls; pI++) {
-      // Create a poll for a random topic or assignment
-      const contentType = faker.helpers.arrayElement(['topic', 'assignment']);
-      let contentId;
-      
-      if (contentType === 'topic' && data[`meeting`][`${meetingId}`][`topic_ids`].length > 0) {
-        contentId = faker.helpers.arrayElement(data[`meeting`][`${meetingId}`][`topic_ids`]);
-        const pollId = addPoll(data, meetingId, `topic/${contentId}`);
-        
-        // Create an option for the topic poll
-        const optionId = addOption(data, meetingId, pollId, `topic/${contentId}`);
-        
-        // Add votes
-        const numVotes = faker.number.int({ min: 0, max: 5 });
-        for (let vI = 0; vI < numVotes; vI++) {
-          addVote(data, meetingId, optionId);
         }
       }
     }
@@ -137,5 +116,5 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
 }
 
 console.log(
-  JSON.stringify(data, (key, value) => key.endsWith(`_ids`) && value instanceof Array ? [...new Set(value)] : value)
+  JSON.stringify(data, (key, value) => key.endsWith(`_ids`) && value instanceof Array ? [...new Set(value)] : value, 2)
 );
