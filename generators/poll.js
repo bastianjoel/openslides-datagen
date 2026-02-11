@@ -73,6 +73,14 @@ function addOption(data, meetingId, pollId, contentObjectId, options = {}) {
     }
   }
   
+  // Update the content object's option_ids if it's a motion
+  if (contentObjectId && contentObjectId.startsWith('motion/')) {
+    const motionId = parseInt(contentObjectId.split('/')[1]);
+    if (data[`motion`][`${motionId}`]) {
+      data[`motion`][`${motionId}`][`option_ids`].push(nextOptionId);
+    }
+  }
+  
   nextOptionId++;
   return nextOptionId - 1;
 }
