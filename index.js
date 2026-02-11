@@ -22,6 +22,7 @@ const NUM_USERS_PER_MEETING = { min: 50, max: NUM_USERS };
 const NUM_TOPICS_PER_MEETING = { min: 5, max: 20 };
 const NUM_ASSIGNMENTS_PER_MEETING = { min: 1, max: 5 };
 const NUM_MOTIONS_PER_MEETING = { min: 5, max: 15 };
+const MOTION_POLL_PROBABILITY = 0.5; // 50% of motions will have polls
 
 for (let i = nextUserId; i <= NUM_USERS; i++) {
   addUser(data);
@@ -137,7 +138,7 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
         }
         
         // Add motion poll with options
-        if (faker.datatype.boolean(0.5)) {
+        if (faker.datatype.boolean(MOTION_POLL_PROBABILITY)) {
           const pollId = addPoll(data, meetingId, `motion/${motionId}`);
           data[`motion`][`${motionId}`][`poll_ids`].push(pollId);
           
