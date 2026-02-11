@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs';
+import fsExtra from 'fs-extra';
 import { addUser, nextUserId } from './generators/user.js';
 import { addMeetingUser } from './generators/meeting-user.js';
 import { addCommittee } from './generators/committee.js';
@@ -116,6 +117,6 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
   }
 }
 
-console.log(
-  JSON.stringify(data, (key, value) => key.endsWith(`_ids`) && value instanceof Array ? [...new Set(value)] : value)
-);
+fsExtra.writeJson('./data-init.json', data, {
+  replacer: (key, value) => key.endsWith(`_ids`) && value instanceof Array ? [...new Set(value)] : value
+})

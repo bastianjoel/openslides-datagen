@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^8.4.1"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.3"
   }
 }
