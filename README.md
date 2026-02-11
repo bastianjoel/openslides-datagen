@@ -25,6 +25,7 @@ The generator will create a large dataset with:
 - 50 committees
 - Multiple meetings per committee
 - Topics with agenda items and list of speakers
+- Motions with submitters, polls, and votes
 - Assignments with candidates and polls
 - Polls with options and votes
 - List of speakers with speakers
@@ -40,6 +41,8 @@ const NUM_USERS = 2000;
 const NUM_USERS_PER_MEETING = { min: 50, max: NUM_USERS };
 const NUM_TOPICS_PER_MEETING = { min: 5, max: 20 };
 const NUM_ASSIGNMENTS_PER_MEETING = { min: 1, max: 5 };
+const NUM_MOTIONS_PER_MEETING = { min: 5, max: 15 };
+const MOTION_POLL_PROBABILITY = 0.5; // 50% of motions will have polls
 ```
 
 ## Generators
@@ -56,8 +59,10 @@ The following generators are available:
 ### Meeting Content
 - **topic.js** - Creates topics for meetings with titles and text content
 - **agenda-item.js** - Generates agenda items (common, internal, hidden types)
+- **motion.js** - Creates motions with realistic titles, text, and reason
+- **motion-submitter.js** - Links meeting users as motion submitters
 - **assignment.js** - Creates assignments with candidates for elections
-- **poll.js** - Generates polls with options and votes (supports multiple types)
+- **poll.js** - Generates polls with options and votes (supports motions and assignments)
 - **list-of-speakers.js** - Creates list of speakers with individual speakers
 
 ### Workflow
@@ -78,8 +83,9 @@ Each generator:
 
 The generated JSON includes all entities with proper relationships:
 - Topics linked to agenda items and list of speakers
+- Motions with submitters, agenda items, list of speakers, polls with votes
 - Assignments with candidates and polls
-- Polls with options and votes
+- Polls with options and votes (for both motions and assignments)
 - Speakers linked to meeting users and list of speakers
 - All entities properly linked to their parent meeting
 

@@ -9,6 +9,8 @@ import { addAgendaItem } from './generators/agenda-item.js';
 import { addListOfSpeakers, addSpeaker } from './generators/list-of-speakers.js';
 import { addAssignment, addAssignmentCandidate } from './generators/assignment.js';
 import { addPoll, addOption, addVote } from './generators/poll.js';
+import { addMotion } from './generators/motion.js';
+import { addMotionSubmitter } from './generators/motion-submitter.js';
 import { faker } from '@faker-js/faker';
 
 const fileData = readFileSync('./example-data.json');
@@ -20,6 +22,8 @@ const NUM_USERS = 2000;
 const NUM_USERS_PER_MEETING = { min: 50, max: NUM_USERS };
 const NUM_TOPICS_PER_MEETING = { min: 5, max: 20 };
 const NUM_ASSIGNMENTS_PER_MEETING = { min: 1, max: 5 };
+const NUM_MOTIONS_PER_MEETING = { min: 5, max: 15 };
+const MOTION_POLL_PROBABILITY = 0.5; // 50% of motions will have polls
 
 for (let i = nextUserId; i <= NUM_USERS; i++) {
   addUser(data);
@@ -103,6 +107,54 @@ for (let cI = 2; cI <= NUM_COMMITTEES; cI++) {
       }
       
       // Add some speakers to assignment list
+      if (meetingUsers && meetingUsers.length > 0) {
+        const numSpeakers = faker.number.int({ min: 0, max: 3 });
+        for (let sI = 0; sI < numSpeakers && sI < meetingUsers.length; sI++) {
+          const randomMeetingUserId = faker.helpers.arrayElement(meetingUsers);
+          addSpeaker(data, meetingId, listOfSpeakersId, randomMeetingUserId);
+        }
+      }
+    }
+    
+    // Generate motions with submitters, polls, and votes
+    const numMotions = faker.helpers.rangeToNumber(NUM_MOTIONS_PER_MEETING);
+    const workflowStateIds = data[`meeting`][`${meetingId}`][`motion_state_ids`] || [];
+    const defaultStateId = workflowStateIds.length > 0 ? workflowStateIds[0] : null;
+    
+    for (let mI = 0; mI < numMotions && defaultStateId; mI++) {
+      const motionId = addMotion(data, meetingId, defaultStateId);
+      const agendaItemId = addAgendaItem(data, meetingId, `motion/${motionId}`);
+      const listOfSpeakersId = addListOfSpeakers(data, meetingId, `motion/${motionId}`);
+      
+      // Link agenda item and list of speakers to motion
+      data[`motion`][`${motionId}`][`agenda_item_id`] = agendaItemId;
+      data[`motion`][`${motionId}`][`list_of_speakers_id`] = listOfSpeakersId;
+      
+      // Add submitters
+      if (meetingUsers && meetingUsers.length > 0) {
+        const numSubmitters = faker.number.int({ min: 1, max: 3 });
+        const submitters = faker.helpers.arrayElements(meetingUsers, Math.min(numSubmitters, meetingUsers.length));
+        for (let submitterMeetingUserId of submitters) {
+          addMotionSubmitter(data, meetingId, motionId, submitterMeetingUserId);
+        }
+        
+        // Add motion poll with options
+        if (faker.datatype.boolean(MOTION_POLL_PROBABILITY)) {
+          const pollId = addPoll(data, meetingId, `motion/${motionId}`);
+          data[`motion`][`${motionId}`][`poll_ids`].push(pollId);
+          
+          // Create option for the motion
+          const optionId = addOption(data, meetingId, pollId, `motion/${motionId}`);
+          
+          // Add some votes
+          const numVotes = faker.number.int({ min: 3, max: 10 });
+          for (let vI = 0; vI < numVotes; vI++) {
+            addVote(data, meetingId, optionId);
+          }
+        }
+      }
+      
+      // Add some speakers to motion list
       if (meetingUsers && meetingUsers.length > 0) {
         const numSpeakers = faker.number.int({ min: 0, max: 3 });
         for (let sI = 0; sI < numSpeakers && sI < meetingUsers.length; sI++) {
